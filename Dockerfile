@@ -1,9 +1,11 @@
-FROM alpine:3.20.3
+FROM python:3.12-alpine
 
-RUN apk add --no-cache python3
+WORKDIR /app
 
-WORKDIR /usr/src/app
+COPY requirements.txt ./
 
-COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD [ "python", "./app.py" ]
+COPY app.py .
+
+CMD [ "fastapi", "run", "app.py", "--port", "80" ]
