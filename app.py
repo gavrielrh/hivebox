@@ -1,20 +1,31 @@
-from fastapi import FastAPI
-import requests
+""" hivebox server """
 from datetime import datetime
+import requests
+from fastapi import FastAPI
 
 app = FastAPI()
 
 VERSION = "v0.0.1"
 
 @app.get("/version")
-def version():
+def version() -> str:
+    """
+    Returns the current application version
+    """
     return VERSION
 
 @app.get("/temperature")
-def temperature():
+def temperature() -> float:
+    """
+    Returns the average temperature in celcius
+    across all opensensemap boxes
+    """
     phenomenon = "temperature"
     date = datetime.now().isoformat() + 'Z'
-    res = requests.get(f"https://api.opensensemap.org/boxes?date={date}&phenomenon={phenomenon}")
+    res = requests.get(
+            f"https://api.opensensemap.org/boxes?date={date}&phenomenon={phenomenon}",
+            timeout=1000
+    )
     all_boxes = res.json()
     c_count = 0
     c_total = 0

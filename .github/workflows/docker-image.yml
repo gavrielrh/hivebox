@@ -28,7 +28,7 @@ jobs:
 
     - name: Lint the Python code with Docker
       run: |
-        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install pylint && pylint **/*.py"
+        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install -r requirements.txt && pip install pylint && pylint **/*.py"
   
   build:
 
