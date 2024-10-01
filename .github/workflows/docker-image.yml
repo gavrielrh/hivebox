@@ -13,22 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: hadolint/hadolint-action@v3.1.0
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
     - name: Lint the Docker image
+      uses: hadolint/hadolint-action@v3.1.0
+
   lint-code:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/setup-python@v5.2.0
-    - name: Lint the Python code
-    - run: pip install pylint
-    - run: pylint **/*.py
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Lint the Python code with Docker
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install pylint && pylint **/*.py"
   
   build:
 
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Build the docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
