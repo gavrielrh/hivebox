@@ -40,3 +40,14 @@ jobs:
 
     - name: Build the docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repository
+      uses: actions/checkout@v4
+
+    - name: Test the Python code with Docker
+      run: |
+        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install -r requirements.txt && pip install pytest && pytest"
