@@ -26,10 +26,15 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v4
 
-    - name: Lint the Python code with Docker
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install -r requirements.txt && pip install pylint && pylint **/*.py"
-  
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Install pylint
+      run: pip install pylint
+
+    - name: Run pylint
+      run: pylint **/*.py
+
   build:
 
     runs-on: ubuntu-latest
@@ -48,6 +53,11 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v4
 
-    - name: Test the Python code with Docker
-      run: |
-        docker run --rm -v ${{ github.workspace }}:/app -w /app python:3.9-slim bash -c "pip install -r requirements.txt && pip install pytest && pytest"
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Install pytest
+      run: pip install pytest
+
+    - name: Run pytest
+      run: pytest
